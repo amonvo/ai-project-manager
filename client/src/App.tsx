@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import CreateProjectForm from './components/CreateProjectForm';
 import ProjectList from './components/ProjectList';
 import './App.css';
 
 function App() {
   const [serverStatus, setServerStatus] = useState('checking...');
+  const [refreshProjects, setRefreshProjects] = useState(0);
 
   useEffect(() => {
     const checkServer = async () => {
@@ -17,6 +19,10 @@ function App() {
     };
     checkServer();
   }, []);
+
+  const handleProjectCreated = () => {
+    setRefreshProjects(prev => prev + 1);
+  };
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f3f4f6' }}>
@@ -54,7 +60,8 @@ function App() {
           </div>
         </div>
         
-        <ProjectList />
+        <CreateProjectForm onProjectCreated={handleProjectCreated} />
+        <ProjectList refresh={refreshProjects} />
       </main>
     </div>
   );
